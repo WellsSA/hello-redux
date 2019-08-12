@@ -5,9 +5,10 @@ import api from '../../../services/api';
 import { formatPrice } from '../../../util/format';
 
 import { addToCartSuccess, updateAmountSuccess } from './actions';
+
 function* addToCart({ id }) {
-  const productExists = yield select(
-    state => state.cart.find(p => p.id === id),
+  const productExists = yield select(state =>
+    state.cart.find(p => p.id === id)
   );
 
   const stock = yield call(api.get, `/stock/${id}`);
@@ -17,21 +18,21 @@ function* addToCart({ id }) {
 
   const amount = currentAmount + 1;
 
-  if (amount > stockAmount){
+  if (amount > stockAmount) {
     toast.error('Quantidade solicitada fora de estoque');
-    return ;
+    return;
   }
 
-  if(productExists) {
+  if (productExists) {
     yield put(updateAmountSuccess(id, amount));
-  } else{
+  } else {
     const response = yield call(api.get, `/products/${id}`);
 
     const data = {
       ...response.data,
       amount: 1,
       priceFormatted: formatPrice(response.data.price),
-    }
+    };
 
     yield put(addToCartSuccess(data));
     // history.push('/cart');
@@ -39,16 +40,16 @@ function* addToCart({ id }) {
 }
 
 function* updateAmount({ id, amount }) {
-  if (amount <= 0 ) return;
+  if (amount <= 0) return;
 
   // const product = yield select(state => state.cart.find(p => p.id === id));
 
   const stock = yield call(api.get, `/stock/${id}`);
   const stockAmount = stock.data.amount;
 
-  if(amount > stockAmount) {
+  if (amount > stockAmount) {
     toast.error('Quantidade solicitada fora de estoque');
-    return ;
+    return;
   }
 
   yield put(updateAmountSuccess(id, amount));

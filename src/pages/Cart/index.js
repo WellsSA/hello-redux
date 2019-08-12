@@ -1,4 +1,5 @@
- import React from 'react';
+/* eslint-disable react/prop-types */
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -23,7 +24,7 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
 
   return (
     <Container>
-       <ProductTable>
+      <ProductTable>
         <thead>
           <tr>
             <th />
@@ -34,10 +35,10 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
           </tr>
         </thead>
         <tbody>
-          { cart.map(product => (
+          {cart.map(product => (
             <tr>
               <td>
-                <img src={product.image} alt={product.title}/>
+                <img src={product.image} alt={product.title} />
               </td>
               <td>
                 <strong>{product.title}</strong>
@@ -45,7 +46,7 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
               </td>
               <td>
                 <div>
-                  <button type="button" onClick={() => decrement(product)} >
+                  <button type="button" onClick={() => decrement(product)}>
                     <MdRemoveCircleOutline size={20} color="#7159C1" />
                   </button>
                   <input type="number" readOnly value={product.amount} />
@@ -60,25 +61,24 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
               <td>
                 <button
                   type="button"
-                  onClick={ () =>removeFromCart(product.id) }
+                  onClick={() => removeFromCart(product.id)}
                 >
                   <MdDelete size={20} color="#7159C1" />
-
                 </button>
               </td>
             </tr>
           ))}
-          </tbody>
-       </ProductTable>
+        </tbody>
+      </ProductTable>
 
-       <footer>
-         <button type="button">Finalizar pedido</button>
+      <footer>
+        <button type="button">Finalizar pedido</button>
 
-         <Total>
+        <Total>
           <span>TOTAL</span>
           <strong>{total}</strong>
-         </Total>
-       </footer>
+        </Total>
+      </footer>
     </Container>
   );
 }
@@ -86,7 +86,7 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
 const mapStateToProps = state => ({
   cart: state.cart.map(product => ({
     ...product,
-    subtotal: formatPrice(product.price * product.amount)
+    subtotal: formatPrice(product.price * product.amount),
   })),
   total: formatPrice(
     state.cart.reduce((total, product) => {
@@ -97,4 +97,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(CartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);
